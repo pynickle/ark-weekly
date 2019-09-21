@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1>方舟周报</h1>
+        <a href="/post/recognize">发布周报</a>
+        <br>
+        {% for i in range(1, numbers+1) %}
+        <a href="/article/{{ i }}">方舟周报（第{{ i }}期）</a>
+        <br>
+        {% endfor %}
+    </body>
+</html>
