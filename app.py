@@ -10,7 +10,7 @@ app.config.from_pyfile("config.py")
 
 @app.route("/")
 def index():
-    numbers = len(os.listdir(os.getcwd() + "/templates/articles"))
+    numbers = len(os.listdir("./templates/articles")) - 1
     return render_template("index.html", numbers = numbers)
 
 @app.route("/article/<int:number>")
@@ -42,8 +42,8 @@ def post():
 @app.route("/post/article", methods=["POST"])
 def post_article():
     article = request.form.get("article")
-    numbers = len(os.listdir(os.getcwd() + "/instance/articles")) + 1
-    with open(os.getcwd() + "/instance/articles/" + str(numbers) + ".md", "w", encoding="utf-8") as f:
+    numbers = len(os.listdir("./instance/articles"))
+    with open("./instance/articles/" + str(numbers) + ".md", "w", encoding="utf-8") as f:
         f.write(article)
     convert()
     return redirect("/")
