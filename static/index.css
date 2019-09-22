@@ -1,0 +1,22 @@
+*{
+    font-family: monospace;
+    background-color: rgb(240, 240, 240);
+}
+h1{
+    font-size: 28px;
+    text-align: center;
+}
+.box{
+    background-color: white;
+    padding: 20px;
+    width: 95%;
+    overflow: hidden;
+    margin-top: 15px;
+    border-radius: 5px;
+}
+.box a{
+    font-size: 18px;
+}
+.post{
+    font-size: 18px;
+}

@@ -1,4 +1,5 @@
 import os
+import re
 import hashlib
 
 from flask import Flask, render_template, request, redirect, session
@@ -64,6 +65,8 @@ def post_pdf():
         r = os.popen("pdf2html " + path)
         output = r.read()
         numbers = len(os.listdir("./templates/articles"))
+        output = output.replace("<title>None</title>", "<title>方舟周报（第" + str(numbers) + "期）</title>")
+        output += "<link rel='stylesheet' href=\"{{ url_for('static', filename='article.css') }}\" type='text/css'>"
         with open("./templates/articles/" + str(numbers) + ".html", "w", encoding="utf-8") as f:
             f.write(output)
         return redirect("/")
