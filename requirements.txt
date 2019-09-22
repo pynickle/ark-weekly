@@ -1,3 +1,4 @@
 flask
 gunicorn
 pypandoc
+pdf-tools

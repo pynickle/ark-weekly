@@ -2,6 +2,8 @@ import os
 import hashlib
 
 from flask import Flask, render_template, request, redirect, session
+from werkzeug.utils import secure_filename
+import pypandoc
 
 from instance.convert import convert
 
@@ -27,17 +29,44 @@ def recognize():
         md5.update(password.encode("utf-8"))
         if md5.hexdigest() == '1431d23edb7b88d900a10b68da06e7b1':
             session["recognize"] = True
-            return redirect("/post")
+            if request.form.get("type") == "1":
+                return redirect("/post/hand")
+            else:
+                return redirect("/post/pdf")
         else:
             return redirect("/post/recognize")
 
-@app.route("/post")
+@app.route("/post/hand")
 def post():
     if session.get("recognize"):
         session["recognize"] = False
         return render_template("post.html")
     else:
         return redirect("/post/recognize")
+
+@app.route("/post/pdf", methods=["GET", "POST"])
+def post_pdf():
+    if request.method == "GET":
+        if session.get("recognize"):
+            session["recognize"] = False
+            return render_template("post-pdf.html")
+        else:
+            return redirect('/post/recognize')
+    else:
+        if "file" not in request.files:
+            return redirect("/post/pdf")
+        file = request.files["file"]
+        if file.filename == "":
+            return redirect("/post/pdf")
+        filename = secure_filename(file.filename)
+        path = "./instance/pdf/" + filename
+        file.save(path)
+        r = os.popen("pdf2html " + path)
+        output = r.read()
+        numbers = len(os.listdir("./templates/articles"))
+        with open("./templates/articles/" + str(numbers) + ".html", "w", encoding="utf-8") as f:
+            f.write(output)
+        return redirect("/")
 
 @app.route("/post/article", methods=["POST"])
 def post_article():
